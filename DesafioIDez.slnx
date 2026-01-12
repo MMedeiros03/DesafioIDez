@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="DesafioIDez.Aplicacao/DesafioIDez.Aplicacao.csproj" />
+  <Project Path="DesafioIDez.Dominio/DesafioIDez.Dominio.csproj" />
+  <Project Path="DesafioIDez.Infraestrutura/DesafioIDez.Infraestrutura.csproj" />
+  <Project Path="DesafioIDez.Testes/DesafioIDez.Testes.csproj" />
+  <Project Path="DesafioIDez/DesafioIDez.Api.csproj" />
+</Solution>
