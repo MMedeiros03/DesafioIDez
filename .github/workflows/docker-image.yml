@@ -21,7 +21,7 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.IMAGE_NAME }}:latest .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.IMAGE_NAME }}:latest ./DesafioIDez
           
       - name: Push Docker Image
         run: |
