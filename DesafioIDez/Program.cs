@@ -8,7 +8,9 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseMiddleware<ErrorMiddleware>();
+app.UseCors("CorsPolicy");
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
