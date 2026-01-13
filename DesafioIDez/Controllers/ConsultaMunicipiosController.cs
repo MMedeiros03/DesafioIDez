@@ -1,4 +1,5 @@
-﻿using DesafioIDez.Aplicacao.Interfaces.Factory;
+﻿using DesafioIDez.Aplicacao.DTO;
+using DesafioIDez.Aplicacao.Interfaces.Factory;
 using DesafioIDez.Dominio.Entidades;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,14 +14,14 @@ namespace DesafioIDez.Api.Controllers
 
         [HttpGet]
         [Route("consulta")]
-        public async Task<ActionResult<List<Municipio>>> ConsultarMunicipiosPorEstado([FromQuery] string estado)
+        public async Task<ActionResult<ListaPaginadaRDTO<Municipio>>> ConsultarMunicipiosPorEstado([FromQuery] FiltroEstadoDto filtro)
         {
             var providerConfig = _configuration["Provider"]
                 ?? throw new ArgumentException("Não foi possivel obter o provedor selecionado.");
 
             var servico = _consultaMunicipiosFactory.ObterConsulta(providerConfig);
 
-            return await servico.ConsultarMunicipiosPorEstadoAsync(estado);
+            return await servico.ConsultarMunicipiosPorEstadoAsync(filtro);
         }
     }
 }
