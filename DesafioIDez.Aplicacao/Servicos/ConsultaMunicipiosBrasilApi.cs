@@ -2,7 +2,7 @@
 using DesafioIDez.Dominio.Entidades;
 using DesafioIDez.Dominio.Interfaces.Providers;
 
-namespace DesafioIDez.Infraestrutura.Servicos;
+namespace DesafioIDez.Aplicacao.Servicos;
 
 public class ConsultaMunicipiosBrasilApi(IBrasilApiProvider brasilApiProvider ) : IConsultaMunicipiosServico
 {
