@@ -1,6 +1,7 @@
 ﻿using DesafioIDez.Aplicacao.DTO;
 using DesafioIDez.Aplicacao.Interfaces.Servicos;
 using DesafioIDez.Dominio.Entidades;
+using System;
 
 namespace DesafioIDez.Aplicacao.Servicos;
 
@@ -40,6 +41,10 @@ public abstract class ConsultaMunicipioBase(IRedisCacheServico redisCacheServico
         var tamanhoPagina = filtroEstado.TamanhoPagina <= 0 ? 10 : filtroEstado.TamanhoPagina;
 
         var items = municipios
+            .Where(m =>
+                (string.IsNullOrEmpty(filtroEstado.Municipio) || m.Name.StartsWith(filtroEstado.Municipio)) &&
+                (string.IsNullOrEmpty(filtroEstado.Codigo_Ibge) || m.IBGE_Code.StartsWith(filtroEstado.Codigo_Ibge))
+            )
             .Skip((pagina - 1) * tamanhoPagina)
             .Take(tamanhoPagina)
             .ToList();
