@@ -42,10 +42,12 @@ public abstract class ConsultaMunicipioBase(IRedisCacheServico redisCacheServico
 
         var itensFiltrados = municipios
             .Where(m =>
-                (string.IsNullOrEmpty(filtroEstado.Municipio) || m.Name.StartsWith(filtroEstado.Municipio)) &&
-                (string.IsNullOrEmpty(filtroEstado.Codigo_Ibge) || m.IBGE_Code.StartsWith(filtroEstado.Codigo_Ibge))
+                (string.IsNullOrEmpty(filtroEstado.Municipio) ||
+                 m.Name.StartsWith(filtroEstado.Municipio, StringComparison.OrdinalIgnoreCase)) &&
+                (string.IsNullOrEmpty(filtroEstado.Codigo_Ibge) ||
+                 m.IBGE_Code.StartsWith(filtroEstado.Codigo_Ibge))
             ).ToList();
-        
+
         var itensPaginados = itensFiltrados
             .Skip((pagina - 1) * tamanhoPagina)
             .Take(tamanhoPagina)
