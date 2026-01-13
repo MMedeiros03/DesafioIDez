@@ -40,11 +40,13 @@ public abstract class ConsultaMunicipioBase(IRedisCacheServico redisCacheServico
         var pagina = filtroEstado.Pagina <= 0 ? 1 : filtroEstado.Pagina;
         var tamanhoPagina = filtroEstado.TamanhoPagina <= 0 ? 10 : filtroEstado.TamanhoPagina;
 
-        var items = municipios
+        var itensFiltrados = municipios
             .Where(m =>
                 (string.IsNullOrEmpty(filtroEstado.Municipio) || m.Name.StartsWith(filtroEstado.Municipio)) &&
                 (string.IsNullOrEmpty(filtroEstado.Codigo_Ibge) || m.IBGE_Code.StartsWith(filtroEstado.Codigo_Ibge))
-            )
+            ).ToList();
+        
+        var itensPaginados = itensFiltrados
             .Skip((pagina - 1) * tamanhoPagina)
             .Take(tamanhoPagina)
             .ToList();
@@ -53,9 +55,9 @@ public abstract class ConsultaMunicipioBase(IRedisCacheServico redisCacheServico
         {
             Pagina = filtroEstado.Pagina,
             TamanhoPagina = tamanhoPagina,
-            Itens = items,
-            TotalItens = municipios.Count,
-            TotalPaginas = (int)Math.Ceiling((double)municipios.Count / tamanhoPagina)
+            Itens = itensPaginados,
+            TotalItens = itensFiltrados.Count,
+            TotalPaginas = (int)Math.Ceiling((double)itensFiltrados.Count / tamanhoPagina)
         };
     }
 }
