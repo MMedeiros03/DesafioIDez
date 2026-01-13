@@ -1,3 +1,8 @@
+using DesafioIDez.Api;
+using DesafioIDez.Api.Middlewares;
+using Microsoft.OpenApi;
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
@@ -22,13 +27,11 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Desafio IDez API",
         Version = "v1",
-        Description = "API para consulta de municÃ­pios por UF"
+        Description = "API para consulta de municípios por UF"
     });
 });
 
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.AdicionarDependencias();
 
 var app = builder.Build();
 
@@ -46,9 +49,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
