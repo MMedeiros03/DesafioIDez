@@ -1,15 +1,21 @@
-﻿using DesafioIDez.Aplicacao.Interfaces.Servicos;
+﻿using DesafioIDez.Aplicacao.DTO;
+using DesafioIDez.Aplicacao.Interfaces.Servicos;
 using DesafioIDez.Dominio.Entidades;
 using DesafioIDez.Dominio.Interfaces.Providers;
 
 namespace DesafioIDez.Aplicacao.Servicos;
 
-public class ConsultaMunicipiosBrasilApi(IBrasilApiProvider brasilApiProvider ) : IConsultaMunicipiosServico
+public class ConsultaMunicipiosBrasilApi(IBrasilApiProvider brasilApiProvider, IRedisCacheServico redisCacheServico)
+    : ConsultaMunicipioBase(redisCacheServico), IConsultaMunicipiosServico
 {
     private readonly IBrasilApiProvider _brasilApiProvider = brasilApiProvider;
 
-    public async Task<List<Municipio>> ConsultarMunicipiosPorEstadoAsync(string estado)
+    public Task<ListaPaginadaRDTO<Municipio>> ConsultarMunicipiosPorEstadoAsync(FiltroEstadoDto filtroEstado)
     {
-        return await _brasilApiProvider.ObterMunicipiosPorEstadoAsync(estado);
+        return ConsultarAsync(
+            filtroEstado.Estado,
+            filtroEstado,
+            "desafioidez:brasilApi:municipios",
+            _brasilApiProvider.ObterMunicipiosPorEstadoAsync);
     }
 }

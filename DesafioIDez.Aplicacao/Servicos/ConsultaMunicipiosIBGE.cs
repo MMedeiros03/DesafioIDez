@@ -1,15 +1,22 @@
-﻿using DesafioIDez.Aplicacao.Interfaces.Servicos;
+﻿using DesafioIDez.Aplicacao.DTO;
+using DesafioIDez.Aplicacao.Interfaces.Servicos;
 using DesafioIDez.Dominio.Entidades;
 using DesafioIDez.Dominio.Interfaces.Providers;
 
 namespace DesafioIDez.Aplicacao.Servicos;
 
-public class ConsultaMunicipiosIBGE(IIBGEProvider ibgeProvider) : IConsultaMunicipiosServico
+public class ConsultaMunicipiosIBGE(
+        IIBGEProvider ibgeProvider,
+        IRedisCacheServico redisCacheServico) : ConsultaMunicipioBase(redisCacheServico), IConsultaMunicipiosServico
 {
     private readonly IIBGEProvider _ibgeProvider = ibgeProvider;
 
-    public async Task<List<Municipio>> ConsultarMunicipiosPorEstadoAsync(string estado)
+    public Task<ListaPaginadaRDTO<Municipio>> ConsultarMunicipiosPorEstadoAsync(FiltroEstadoDto filtroEstado)
     {
-        return await _ibgeProvider.ObterMunicipiosPorEstadoAsync(estado);
+        return ConsultarAsync(
+            filtroEstado.Estado,
+            filtroEstado,
+            "desafioidez:ibge:municipios",
+            _ibgeProvider.ObterMunicipiosPorEstadoAsync);
     }
 }
