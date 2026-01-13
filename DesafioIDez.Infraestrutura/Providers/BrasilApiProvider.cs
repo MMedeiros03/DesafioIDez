@@ -28,8 +28,8 @@ public class BrasilApiProvider(HttpClient httpClient) : IBrasilApiProvider
         return municipios?
             .Select(m => new Municipio
             {
-                Codigo_IBGE = m.Codigo_IBGE,
-                Nome = m.Nome
+                IBGE_Code = m.Codigo_IBGE,
+                Name = m.Nome
             }).ToList() ?? [];
     }
 }

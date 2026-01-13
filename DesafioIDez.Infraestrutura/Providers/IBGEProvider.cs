@@ -22,13 +22,13 @@ public class IBGEProvider(HttpClient httpClient) : IIBGEProvider
             PropertyNameCaseInsensitive = true
         };
 
-        var municipios = JsonSerializer.Deserialize<List<MunicioBrasilApiDTO>>(conteudo, opcoes);
+        var municipios = JsonSerializer.Deserialize<List<MunicipioIBGE>>(conteudo, opcoes);
 
         return municipios?
             .Select(m => new Municipio
             {
-                Codigo_IBGE = m.Codigo_IBGE,
-                Nome = m.Nome
+                IBGE_Code = m.Id.ToString(),
+                Name = m.Nome
             }).ToList() ?? [];
     }
 }

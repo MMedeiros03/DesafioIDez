@@ -2,6 +2,6 @@
 
 public class Municipio
 {
-    public required string Nome { get; set; }
-    public required string Codigo_IBGE { get; set; }
+    public required string Name { get; set; }
+    public required string IBGE_Code { get; set; }
 }
