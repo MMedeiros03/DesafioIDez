@@ -10,9 +10,9 @@ COPY ["DesafioIDez.slnx", "./"]
 
 # Copia os csproj (cache eficiente)
 COPY ["DesafioIDez/DesafioIDez.Api.csproj", "DesafioIDez/"]
-COPY ["DesafioIDez.Aplicacao/DesafioIDez.Aplicacao.csproj", "DesafioIDez.Aplicacao/"]
-COPY ["DesafioIDez.Dominio/DesafioIDez.Dominio.csproj", "DesafioIDez.Dominio/"]
 COPY ["DesafioIDez.Infraestrutura/DesafioIDez.Infraestrutura.csproj", "DesafioIDez.Infraestrutura/"]
+COPY ["DesafioIDez.Dominio/DesafioIDez.Dominio.csproj", "DesafioIDez.Dominio/"]
+COPY ["DesafioIDez.Aplicacao/DesafioIDez.Aplicacao.csproj", "DesafioIDez.Aplicacao/"]
 
 # Restore
 RUN dotnet restore "DesafioIDez/DesafioIDez.Api.csproj"
