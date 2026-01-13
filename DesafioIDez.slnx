@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Itens de Solução/">
+    <File Path="docker-compose.yml" />
+  </Folder>
   <Project Path="DesafioIDez.Aplicacao/DesafioIDez.Aplicacao.csproj" />
   <Project Path="DesafioIDez.Dominio/DesafioIDez.Dominio.csproj" />
   <Project Path="DesafioIDez.Infraestrutura/DesafioIDez.Infraestrutura.csproj" />

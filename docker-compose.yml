@@ -1,0 +1,31 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: desafioidez-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    networks:
+      - internal
+
+  api:
+    build:
+      context: .
+      dockerfile: DesafioIDez/Dockerfile
+    container_name: desafioidez-api
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+    networks:
+      - internal
+
+volumes:
+  redis-data:
+
+networks:
+  internal:
+    driver: bridge
