@@ -31,6 +31,15 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration =
+        builder.Configuration["Redis:ConnectionString"];
+
+    options.InstanceName =
+        builder.Configuration["Redis:InstanceName"];
+});
+
 builder.AdicionarDependencias();
 
 var app = builder.Build();

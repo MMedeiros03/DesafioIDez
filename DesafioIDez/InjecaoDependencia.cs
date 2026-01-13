@@ -4,6 +4,7 @@ using DesafioIDez.Aplicacao.Interfaces.Factory;
 using DesafioIDez.Aplicacao.Interfaces.Servicos;
 using DesafioIDez.Aplicacao.Servicos;
 using DesafioIDez.Dominio.Interfaces.Providers;
+using DesafioIDez.Infraestrutura.Cache;
 using DesafioIDez.Infraestrutura.Providers;
 
 namespace DesafioIDez.Api;
@@ -15,6 +16,8 @@ public static class InjecaoDependencia
         builder.Services.AddScoped<IConsultaMunicipiosFactory, ConsultaMunicipiosFactory>();
         builder.Services.AddScoped<IBrasilApiProvider, BrasilApiProvider>();
         builder.Services.AddScoped<IIBGEProvider, IBGEProvider>();
+        builder.Services.AddScoped<IRedisCacheServico, RedisCacheServico>();
+
         builder.Services.AddKeyedScoped<IConsultaMunicipiosServico, ConsultaMunicipiosBrasilApi>(ProviderEnum.BrasilApi);
         builder.Services.AddKeyedScoped<IConsultaMunicipiosServico, ConsultaMunicipiosIBGE>(ProviderEnum.IBGE);
 
