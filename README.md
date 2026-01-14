@@ -55,15 +55,8 @@ GET /api/ConsultaMunicipios/consulta?pagina=1&tamanhoPagina=10&estado=RS
 
 ```http
 {
-  "traceId": "3f29c8e2-7b4a-4d12-9f90-1a2b3c4d5e6f",
-  "date": "13/01/2026 10:25:48",
-  "source": "DesafioIDez.Api",
-  "errorDetails": {
-    "logReference": "LOG123456789",
-    "innerException": "System.NullReferenceException: Object reference not set to an instance of an object.",
-    "message": "Ocorreu um erro ao tentar processar a requisição.",
-    "stackTrace": "at DesafioIDez.Controllers.ConsultaMunicipiosController.Consulta() in /src/DesafioIDez/Controllers/ConsultaMunicipiosController.cs:line 45"
-  }
+  "status": "InternalServerError",
+  "mensagem": "The message timed out in the backlog attempting to send because no connection became available (5000ms)"
 }
 ```
 
