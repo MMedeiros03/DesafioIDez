@@ -10,21 +10,35 @@ namespace DesafioIDez.Infraestrutura.Cache
 
         public async Task<T?> ObterAsync<T>(string key)
         {
-            var cachedValue = await _distributedCache.GetStringAsync(key);
-            return cachedValue is null
-                ? default
-                : JsonSerializer.Deserialize<T>(cachedValue);
+            try
+            {
+                var cachedValue = await _distributedCache.GetStringAsync(key);
+                return cachedValue is null
+                    ? default
+                    : JsonSerializer.Deserialize<T>(cachedValue);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Houve um erro de comunicação com o Redis ao tentar buscar valores.", ex);
+            }
         }
 
         public async Task AdicionarAsync<T>(string key, T value, TimeSpan expiration)
         {
-            var options = new DistributedCacheEntryOptions
+            try
             {
-                AbsoluteExpirationRelativeToNow = expiration
-            };
+                var options = new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = expiration
+                };
 
-            var json = JsonSerializer.Serialize(value);
-            await _distributedCache.SetStringAsync(key, json, options);
+                var json = JsonSerializer.Serialize(value);
+                await _distributedCache.SetStringAsync(key, json, options);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Houve um erro de comunicação com o Redis ao tentar registrar valores.", ex);
+            }
         }
     }
 }

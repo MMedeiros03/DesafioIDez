@@ -1,6 +1,7 @@
 ﻿using DesafioIDez.Dominio.Entidades;
 using DesafioIDez.Dominio.Interfaces.Providers;
 using DesafioIDez.Infraestrutura.DTO;
+using DesafioIDez.Infraestrutura.Excecoes;
 using System.Text.Json;
 
 namespace DesafioIDez.Infraestrutura.Providers;
@@ -11,24 +12,36 @@ public class IBGEProvider(HttpClient httpClient) : IIBGEProvider
 
     public async Task<List<Municipio>> ObterMunicipiosPorEstadoAsync(string estado)
     {
-        var resposta = await _httpClient.GetAsync($"v1/localidades/estados/{estado.ToLower()}/municipios");
-
-        if (!resposta.IsSuccessStatusCode) throw new Exception("Erro ao obter municípios do Brasil API.");
-
-        var conteudo = await resposta.Content.ReadAsStringAsync();
-
-        var opcoes = new JsonSerializerOptions
+        try
         {
-            PropertyNameCaseInsensitive = true
-        };
+            var resposta = await _httpClient.GetAsync($"v1/localidades/estados/{estado.ToLower()}/municipios");
 
-        var municipios = JsonSerializer.Deserialize<List<MunicipioIBGE>>(conteudo, opcoes);
+            if (!resposta.IsSuccessStatusCode) throw new ServicoExternoException("Erro ao obter municípios da api IBGE.");
 
-        return municipios?
-            .Select(m => new Municipio
+            var conteudo = await resposta.Content.ReadAsStringAsync();
+
+            var opcoes = new JsonSerializerOptions
             {
-                IBGE_Code = m.Id.ToString(),
-                Name = m.Nome
-            }).ToList() ?? [];
+                PropertyNameCaseInsensitive = true
+            };
+
+            var municipios = JsonSerializer.Deserialize<List<MunicipioIBGE>>(conteudo, opcoes);
+
+            return municipios?
+                .Select(m => new Municipio
+                {
+                    IBGE_Code = m.Id.ToString(),
+                    Name = m.Nome
+                }).ToList() ?? [];
+        }
+        catch (ServicoExternoException)
+        {
+            throw;
+        }
+        catch(Exception ex)
+        {
+            throw new Exception("Erro inesperado na comunicação com o servico IBGE.", ex);
+        }
+        
     }
 }

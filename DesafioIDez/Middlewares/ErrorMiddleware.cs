@@ -28,7 +28,7 @@ namespace DesafioIDez.Api.Middlewares
 
             var statusCode = ex switch
             {
-                AppException appEx => appEx.StatusCode,
+                ServicoExternoException => HttpStatusCode.ServiceUnavailable,
                 ArgumentException => HttpStatusCode.BadRequest,
                 _ => HttpStatusCode.InternalServerError
             };
@@ -43,7 +43,6 @@ namespace DesafioIDez.Api.Middlewares
             var jsonOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
 
             await context.Response.WriteAsync(

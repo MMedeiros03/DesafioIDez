@@ -1,6 +1,7 @@
 ﻿using DesafioIDez.Dominio.Entidades;
 using DesafioIDez.Dominio.Interfaces.Providers;
 using DesafioIDez.Infraestrutura.DTO;
+using DesafioIDez.Infraestrutura.Excecoes;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -12,24 +13,35 @@ public class BrasilApiProvider(HttpClient httpClient) : IBrasilApiProvider
 
     public async Task<List<Municipio>> ObterMunicipiosPorEstadoAsync(string estado)
     {
-        var resposta = await _httpClient.GetAsync($"ibge/municipios/v1/{estado}");
-
-        if (!resposta.IsSuccessStatusCode) throw new Exception("Erro ao obter municípios do Brasil API.");
-
-        var conteudo = await resposta.Content.ReadAsStringAsync();
-
-        var opcoes = new JsonSerializerOptions
+        try
         {
-            PropertyNameCaseInsensitive = true
-        };
+            var resposta = await _httpClient.GetAsync($"ibge/municipios/v1/{estado}");
 
-        var municipios = await resposta.Content.ReadFromJsonAsync<List<MunicioBrasilApiDTO>>();
+            if (!resposta.IsSuccessStatusCode) throw new ServicoExternoException("Houve um erro ao obter municípios do Brasil API.");
 
-        return municipios?
-            .Select(m => new Municipio
+            var conteudo = await resposta.Content.ReadAsStringAsync();
+
+            var opcoes = new JsonSerializerOptions
             {
-                IBGE_Code = m.Codigo_IBGE,
-                Name = m.Nome
-            }).ToList() ?? [];
+                PropertyNameCaseInsensitive = true
+            };
+
+            var municipios = await resposta.Content.ReadFromJsonAsync<List<MunicioBrasilApiDTO>>();
+
+            return municipios?
+                .Select(m => new Municipio
+                {
+                    IBGE_Code = m.Codigo_IBGE,
+                    Name = m.Nome
+                }).ToList() ?? [];
+        }
+        catch(ServicoExternoException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Erro inesperado na comunicação com o BrasilApi.", ex);
+        }
     }
 }
